@@ -1,0 +1,73 @@
+{
+    "name": "ivan-s",
+    "displayName": "Ivan's",
+    "description": "test",
+    "version": "0.0.1",
+    "publisher": "mypubname",
+    "engines": {
+        "vscode": "^1.17.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:extension.preview"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "languages": [
+            {
+                "id": "parquet",
+                "aliases": [
+                    "Parquet",
+                    "parquet"
+                ],
+                "extensions": [
+                    ".parquet"
+                ]
+            }
+        ],
+        "commands": [
+            {
+                "command": "extension.preview",
+                "title": "Preview Apache Parquet",
+                "category": "Parquet",
+                "icon": {
+                    "light": "./images/menu-light.svg",
+                    "dark": "./images/menu-dark.svg"
+                }
+            }
+        ],
+        "menus": {
+            "editor/title": [
+                {
+                    "command": "extension.preview",
+                    "alt": "extension.preview",
+                    "group": "navigation",
+                    "when": "resourceLangId == parquet"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "command": "extension.preview",
+                    "alt": "extension.preview",
+                    "group": "navigation",
+                    "when": "resourceLangId == parquet"
+                }
+            ]
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    }
+}
