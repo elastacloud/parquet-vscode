@@ -1,7 +1,7 @@
 {
-    "name": "ivan-s",
-    "displayName": "Ivan's",
-    "description": "test",
+    "name": "parquet-viewer-vscode",
+    "displayName": "Apache Parquet Viewer",
+    "description": "Lets you view Apache Parquet (.parquet) files directly in Visual Studio Code",
     "version": "0.0.1",
     "publisher": "mypubname",
     "engines": {
@@ -33,8 +33,8 @@
                 "title": "Preview Apache Parquet",
                 "category": "Parquet",
                 "icon": {
-                    "light": "./images/menu-light.svg",
-                    "dark": "./images/menu-dark.svg"
+                    "light": "./images/parquet.png",
+                    "dark": "./images/parquet.png"
                 }
             }
         ],
