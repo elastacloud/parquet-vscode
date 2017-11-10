@@ -11,7 +11,9 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.preview"
+        "onLanguage:parquet",
+        "onCommand:extension.preview",
+        "onCommand:extension.parquet-preview"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -24,7 +26,8 @@
                 ],
                 "extensions": [
                     ".parquet"
-                ]
+                ],                
+                "configuration": "./language-configuration.json"
             }
         ],
         "commands": [
@@ -36,7 +39,17 @@
                     "light": "./images/parquet.png",
                     "dark": "./images/parquet.png"
                 }
+            },{
+                "command": "extension.parquet-preview",
+                "title": "Preview Apache Parquet"
             }
+        ],
+        "grammars": [
+          {
+            "language": "parquet",
+            "scopeName": "text.plain",
+            "path": "./syntaxes/parquet.tmLanguage"
+          }
         ],
         "menus": {
             "editor/title": [
@@ -49,8 +62,7 @@
             ],
             "explorer/context": [
                 {
-                    "command": "extension.preview",
-                    "alt": "extension.preview",
+                    "command": "extension.parquet-preview",
                     "group": "navigation",
                     "when": "resourceLangId == parquet"
                 }

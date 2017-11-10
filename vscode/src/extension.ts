@@ -2,16 +2,32 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as elastacloud from './provider/ParquetDocumentContentProvider';
+const path = require("path");
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
     console.log("Apache Parquet Viewer activated");
+    const provider = new elastacloud.ParquetDocumentContentProvider(context);
+    const registerProvider = vscode.workspace.registerTextDocumentContentProvider("parquet-preview", provider);
+    const openedEvent = vscode.workspace.onDidOpenTextDocument((document) => {
+        vscode.window.showInformationMessage("opening parquet");
+        showDocumentPreview(document);
+    });
+    const previewCmd = vscode.commands.registerCommand("extension.parquet-preview", (uri) => {
+        showPreview(uri);
+    });
+    // for pdf file already opend.
+    if (vscode.window.activeTextEditor) {
+        showDocumentPreview(vscode.window.activeTextEditor.document);
+    }
+    context.subscriptions.push(registerProvider, openedEvent, previewCmd);
 
     function openParquet(filePath: string) {
 
-        console.log(`opening '${filePath}'...`)
+        showPreview(filePath);
 
         vscode.window.showInformationMessage("opening " + filePath);
     }
@@ -35,4 +51,27 @@ export function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
+}
+
+export function showDocumentPreview(document) {
+    if (document.languageId === "parquet" && document.uri.scheme !== "parquet-preview") {
+        vscode.commands.executeCommand("workbench.action.closeActiveEditor").then(() => {
+            showPreview(document.uri);
+        });
+    }
+}
+export function showPreview(uri) {
+    if (uri.scheme === "parquet-preview")
+        return;
+    let basename = path.basename(uri.fsPath);
+    let columns = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : 1;
+    vscode.commands.executeCommand("vscode.previewHtml", buildPreviewUri(uri), columns, basename)
+        .then(null, vscode.window.showErrorMessage);
+}
+export function buildPreviewUri(uri) {
+    return uri.with({
+        scheme: "parquet-preview",
+        path: uri.path + ".rendered.parquet",
+        query: uri.toString(),
+    });
 }
